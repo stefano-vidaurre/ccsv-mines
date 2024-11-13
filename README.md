@@ -1,2 +1,3 @@
-# ccsv-mines
-A simple minesweeper game.
+# CCSV.Mines
+
+A simple minesweeper game.  

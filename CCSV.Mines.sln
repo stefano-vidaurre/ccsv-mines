@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35506.116
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "00 - Info", "00 - Info", "{4CE0871E-FC83-433F-8235-049D24689FC0}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01 - UI", "01 - UI", "{7E8872CF-1263-44FE-B4E4-C8B9B8BB490A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCSV.Mines", "src\CCSV.Mines\CCSV.Mines.csproj", "{8E13D7B0-D441-4CDD-A52B-FD2A40755C43}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8E13D7B0-D441-4CDD-A52B-FD2A40755C43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E13D7B0-D441-4CDD-A52B-FD2A40755C43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E13D7B0-D441-4CDD-A52B-FD2A40755C43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E13D7B0-D441-4CDD-A52B-FD2A40755C43}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8E13D7B0-D441-4CDD-A52B-FD2A40755C43} = {7E8872CF-1263-44FE-B4E4-C8B9B8BB490A}
+	EndGlobalSection
+EndGlobal
