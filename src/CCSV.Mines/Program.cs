@@ -1,4 +1,6 @@
-﻿using Raylib_cs;
+﻿using CCSV.Mines.GameApplications;
+using CCSV.Mines.RaylibApplications;
+using Raylib_cs;
 
 namespace CCSV.Mines;
 
@@ -6,18 +8,12 @@ public static class Program
 {
     public static void Main()
     {
-        Raylib.InitWindow(800, 480, "Hello World");
+        IGameApplicationBuilder builder = RaylibApplicationBuilder.CreateBuilder();
+        builder.Window
+            .SetTitle("Mines")
+            .SetSize(400, 400);
 
-        while (!Raylib.WindowShouldClose())
-        {
-            Raylib.BeginDrawing();
-            Raylib.ClearBackground(Color.White);
-
-            Raylib.DrawText("Hello, world!", 12, 12, 20, Color.Black);
-
-            Raylib.EndDrawing();
-        }
-
-        Raylib.CloseWindow();
+        IGameApplication gameApplication = builder.Build();
+        gameApplication.Run();
     }
 }
