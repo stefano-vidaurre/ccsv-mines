@@ -1,4 +1,5 @@
 ﻿using CCSV.Mines.GameApplications;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CCSV.Mines.RaylibApplications;
 
@@ -6,18 +7,24 @@ public class RaylibApplicationBuilder : IGameApplicationBuilder
 {
     public IGameWindowBuilder Window { get; private set; }
 
-    private RaylibApplicationBuilder(IGameWindowBuilder window)
+    public IServiceCollection Services { get; private set; }
+
+    private RaylibApplicationBuilder(IGameWindowBuilder windowBuilder, IServiceCollection services)
     {
-        Window = window;
+        Window = windowBuilder;
+        Services = services;
     }
 
     public static IGameApplicationBuilder CreateBuilder()
     {
-        return new RaylibApplicationBuilder(new RaylibWindowBuilder());
+        IGameWindowBuilder windowBuilder = new RaylibWindowBuilder();
+        IServiceCollection services = new ServiceCollection();
+
+        return new RaylibApplicationBuilder(windowBuilder, services);
     }
 
     public IGameApplication Build()
     {
-        return RaylibApplication.Create(Window);
+        return RaylibApplication.Create(Window, Services);
     }
 }

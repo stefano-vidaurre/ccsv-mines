@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,7 @@ namespace CCSV.Mines.GameApplications;
 public interface IGameApplicationBuilder
 {
     IGameWindowBuilder Window { get; }
+    IServiceCollection Services { get; }
 
     IGameApplication Build();
 }

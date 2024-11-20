@@ -1,6 +1,5 @@
 ﻿using CCSV.Mines.GameApplications;
 using CCSV.Mines.RaylibApplications;
-using Raylib_cs;
 
 namespace CCSV.Mines;
 
