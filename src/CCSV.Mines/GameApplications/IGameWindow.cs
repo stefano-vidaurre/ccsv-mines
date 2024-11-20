@@ -8,8 +8,10 @@ namespace CCSV.Mines.GameApplications;
 
 public interface IGameWindow
 {
-    void BeginDrawing();
-    void EndDrawing();
+    public string Title { get; }
+    public int Width { get; }
+    public int Height { get; }
+
     bool ShouldClose();
     void Close();
 }

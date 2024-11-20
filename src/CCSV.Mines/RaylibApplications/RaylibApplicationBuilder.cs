@@ -25,6 +25,12 @@ public class RaylibApplicationBuilder : IGameApplicationBuilder
 
     public IGameApplication Build()
     {
-        return RaylibApplication.Create(Window, Services);
+        IGameWindow window = Window.Build();
+
+        Services.AddSingleton((RaylibWindow)window);
+
+        IServiceProvider services = Services.BuildServiceProvider();
+
+        return new GameApplication(window, services);
     }
 }
