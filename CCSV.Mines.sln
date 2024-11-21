@@ -14,6 +14,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01 - UI", "01 - UI", "{7E88
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCSV.Mines", "src\CCSV.Mines\CCSV.Mines.csproj", "{8E13D7B0-D441-4CDD-A52B-FD2A40755C43}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CCSV.Games", "src\CCSV.Games\CCSV.Games.csproj", "{9D0A3D4E-99B0-4942-A0E6-54ED8E5415D9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "02 - Infraestructure", "02 - Infraestructure", "{2869BE08-F230-4AAB-AE33-6A9B19F6FBB9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,11 +28,16 @@ Global
 		{8E13D7B0-D441-4CDD-A52B-FD2A40755C43}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8E13D7B0-D441-4CDD-A52B-FD2A40755C43}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8E13D7B0-D441-4CDD-A52B-FD2A40755C43}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9D0A3D4E-99B0-4942-A0E6-54ED8E5415D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9D0A3D4E-99B0-4942-A0E6-54ED8E5415D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9D0A3D4E-99B0-4942-A0E6-54ED8E5415D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9D0A3D4E-99B0-4942-A0E6-54ED8E5415D9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{8E13D7B0-D441-4CDD-A52B-FD2A40755C43} = {7E8872CF-1263-44FE-B4E4-C8B9B8BB490A}
+		{9D0A3D4E-99B0-4942-A0E6-54ED8E5415D9} = {2869BE08-F230-4AAB-AE33-6A9B19F6FBB9}
 	EndGlobalSection
 EndGlobal

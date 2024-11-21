@@ -1,5 +1,5 @@
 ﻿using CCSV.Domain.Exceptions;
-using CCSV.Mines.GameApplications;
+using CCSV.Games;
 using Raylib_cs;
 
 namespace CCSV.Mines.RaylibApplications;

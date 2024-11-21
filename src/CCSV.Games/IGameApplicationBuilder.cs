@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace CCSV.Mines.GameApplications;
+namespace CCSV.Games;
 
 public interface IGameApplicationBuilder
 {

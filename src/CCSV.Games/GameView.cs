@@ -1,4 +1,4 @@
-﻿namespace CCSV.Mines.GameApplications;
+﻿namespace CCSV.Games;
 public abstract class GameView : IGameView
 {
     private readonly IGameWindow _window;

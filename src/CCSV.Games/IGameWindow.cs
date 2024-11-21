@@ -1,4 +1,4 @@
-﻿namespace CCSV.Mines.GameApplications;
+﻿namespace CCSV.Games;
 
 public interface IGameWindow
 {
@@ -15,7 +15,6 @@ public interface IGameWindow
     public bool IsNextFrame { get; }
     public DateTime DrawingSince { get; }
     public long Delta { get; }
-
 
     void BeginDrawing();
     void EndDrawing();

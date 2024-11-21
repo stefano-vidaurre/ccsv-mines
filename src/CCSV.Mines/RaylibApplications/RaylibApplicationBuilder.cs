@@ -1,4 +1,4 @@
-﻿using CCSV.Mines.GameApplications;
+﻿using CCSV.Games;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CCSV.Mines.RaylibApplications;

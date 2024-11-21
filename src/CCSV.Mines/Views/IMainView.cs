@@ -1,4 +1,4 @@
-﻿using CCSV.Mines.GameApplications;
+﻿using CCSV.Games;
 
 namespace CCSV.Mines.Views;
 public interface IMainView : IGameView

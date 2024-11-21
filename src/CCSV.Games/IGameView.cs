@@ -1,4 +1,4 @@
-﻿namespace CCSV.Mines.GameApplications;
+﻿namespace CCSV.Games;
 public interface IGameView
 {
     void Draw();
