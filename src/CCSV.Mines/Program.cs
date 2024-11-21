@@ -1,6 +1,6 @@
 ﻿using CCSV.Games;
+using CCSV.Games.Raylib;
 using CCSV.Mines.Controllers;
-using CCSV.Mines.RaylibApplications;
 using CCSV.Mines.Views;
 using Microsoft.Extensions.DependencyInjection;
 

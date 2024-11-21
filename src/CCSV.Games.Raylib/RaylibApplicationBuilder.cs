@@ -1,7 +1,6 @@
-﻿using CCSV.Games;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace CCSV.Mines.RaylibApplications;
+namespace CCSV.Games.Raylib;
 
 public class RaylibApplicationBuilder : GameApplicationBuilder
 {

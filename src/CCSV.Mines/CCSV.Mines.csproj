@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CCSV.Games.Raylib\CCSV.Games.Raylib.csproj" />
     <ProjectReference Include="..\CCSV.Games\CCSV.Games.csproj" />
   </ItemGroup>
 

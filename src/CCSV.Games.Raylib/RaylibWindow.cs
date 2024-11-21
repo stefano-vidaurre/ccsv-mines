@@ -1,8 +1,7 @@
 ﻿using CCSV.Domain.Exceptions;
-using CCSV.Games;
-using Raylib_cs;
+using RaylibService = Raylib_cs.Raylib;
 
-namespace CCSV.Mines.RaylibApplications;
+namespace CCSV.Games.Raylib;
 
 public class RaylibWindow : IGameWindow
 {
@@ -49,7 +48,7 @@ public class RaylibWindow : IGameWindow
         IsDrawing = false;
         IsClosed = false;
         DrawingSince = DateTime.UtcNow;
-        Raylib.InitWindow(width, height, title);
+        RaylibService.InitWindow(width, height, title);
     }
 
     public static IGameWindow Create(string title, int width, int height, long targetFps)
@@ -74,23 +73,23 @@ public class RaylibWindow : IGameWindow
         IsDrawing = true;
         LastDelta = Delta;
         DrawingSince = DateTime.UtcNow;
-        Raylib.BeginDrawing();
+        RaylibService.BeginDrawing();
     }
 
     public void EndDrawing()
     {
-        Raylib.EndDrawing();
+        RaylibService.EndDrawing();
         IsDrawing = false;
     }
 
     public bool ShouldClose()
     {
-        return Raylib.WindowShouldClose();
+        return RaylibService.WindowShouldClose();
     }
 
     public void Close()
     {
-        Raylib.CloseWindow();
+        RaylibService.CloseWindow();
         IsClosed = true;
     }
 }

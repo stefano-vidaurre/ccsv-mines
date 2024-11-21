@@ -1,7 +1,6 @@
 ﻿using CCSV.Domain.Exceptions;
-using CCSV.Games;
 
-namespace CCSV.Mines.RaylibApplications;
+namespace CCSV.Games.Raylib;
 
 public class RaylibWindowBuilder : IGameWindowBuilder
 {
