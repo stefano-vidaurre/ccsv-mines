@@ -1,4 +1,5 @@
-﻿using CCSV.Mines.GameApplications;
+﻿using CCSV.Domain.Exceptions;
+using CCSV.Mines.GameApplications;
 
 namespace CCSV.Mines.RaylibApplications;
 
@@ -41,7 +42,7 @@ public class RaylibWindowBuilder : IGameWindowBuilder
     {
         if (targetFps < 1)
         {
-            throw new Exception("Target FPS value cant be less than 1.");
+            throw new InvalidValueException("Target FPS value cant be less than 1.");
         }
 
         _targetFps = targetFps;

@@ -17,7 +17,10 @@ public abstract class GameController : IGameController
     {
         return Task.Run(() =>
         {
-            while (true) ;
+            while (true)
+            {
+                ;
+            }
         });
     }
 }

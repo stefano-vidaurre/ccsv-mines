@@ -1,11 +1,12 @@
-﻿using CCSV.Mines.GameApplications;
+﻿using CCSV.Domain.Exceptions;
+using CCSV.Mines.GameApplications;
 using Raylib_cs;
 
 namespace CCSV.Mines.RaylibApplications;
 
 public class RaylibWindow : IGameWindow
 {
-    private const long OneSecond = TimeSpan.TicksPerSecond; 
+    private const long OneSecond = TimeSpan.TicksPerSecond;
     private static RaylibWindow? _instance = null;
 
     public static bool IsInitialised => _instance != null;
@@ -56,12 +57,12 @@ public class RaylibWindow : IGameWindow
         if (_instance is not null)
         {
             _instance.Close();
-            throw new Exception("The window is already initialised.");
+            throw new WrongOperationException("The window is already initialised.");
         }
 
-        if(targetFps < 1)
+        if (targetFps < 1)
         {
-            throw new Exception("Target FPS value cant be less than 1.");
+            throw new WrongOperationException("Target FPS value cant be less than 1.");
         }
 
         _instance = new RaylibWindow(title, width, height, targetFps);
