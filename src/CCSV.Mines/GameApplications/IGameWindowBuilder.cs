@@ -10,5 +10,6 @@ public interface IGameWindowBuilder
 {
     IGameWindowBuilder SetTitle(string title);
     IGameWindowBuilder SetSize(int width, int height);
+    IGameWindowBuilder SetTargetFps(long fpsTarget);
     IGameWindow Build();
 }

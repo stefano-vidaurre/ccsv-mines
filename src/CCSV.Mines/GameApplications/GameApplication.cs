@@ -26,7 +26,10 @@ public class GameApplication : IGameApplication
                 _updateTask = gameController.Update();
             }
 
-            gameController.Draw();
+            if(_window.IsNextFrame)
+            {
+                gameController.Draw();
+            }
         }
 
         _window.Close();
