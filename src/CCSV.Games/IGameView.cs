@@ -1,6 +1,12 @@
 ﻿namespace CCSV.Games;
 public interface IGameView
 {
+    IGameWindow Window { get; }
     void Draw();
-    void DrawView();
+}
+
+public interface IGameView<in Vmodel> where Vmodel : GameViewModel
+{
+    IGameWindow Window { get; }
+    void Draw(Vmodel model);
 }

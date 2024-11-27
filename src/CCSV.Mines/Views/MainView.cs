@@ -1,25 +1,27 @@
 ﻿using CCSV.Games;
+using CCSV.Mines.Models;
 using Raylib_cs;
 
 namespace CCSV.Mines.Views;
-public class MainView : GameView, IMainView
+public class MainView : IMainView
 {
-    private readonly IGameWindow _gameWindow;
+    public IGameWindow Window { get; private set; }
 
-    public MainView(IGameWindow window) : base(window)
+    public MainView(IGameWindow window)
     {
-        _gameWindow = window;
+        Window = window;
     }
 
-    public override void DrawView()
+    public void Draw(BallViewModel model)
     {
-        long fps = _gameWindow.Fps;
-        long targetFps = _gameWindow.TargetFps;
-        long delta = _gameWindow.LastDelta;
-        long targetDelta = _gameWindow.TargetDelta;
+        long fps = Window.Fps;
+        long targetFps = Window.TargetFps;
+        long delta = Window.LastDelta;
+        long targetDelta = Window.TargetDelta;
 
         Raylib.ClearBackground(Color.White);
         Raylib.DrawText($"FPS: {fps}/{targetFps}", 12, 12, 20, Color.Black);
         Raylib.DrawText($"Delta: {delta}/{targetDelta}", 12, 42, 20, Color.Black);
+        Raylib.DrawCircle(model.PosX, model.PosY, model.Radius, Color.Black);
     }
 }

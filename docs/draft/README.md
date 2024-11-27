@@ -1,6 +1,7 @@
-- Permitir varios controllers
-- Capa de infraestructura para raylib
-- Gestion de eventos y notificacion al controller
-- Gestion de view models
-- Gestion de archivo de configuracion
-- Gestion de texturas 
+# Draft
+
+- Cambiar de un controller a otro
+- Gestión de eventos y notificación al controller
+- Gestión de view models
+- Gestión de archivo de configuración
+- Gestión de texturas

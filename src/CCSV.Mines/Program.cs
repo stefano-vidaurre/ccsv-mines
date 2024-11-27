@@ -16,7 +16,8 @@ public static class Program
             .SetSize(400, 400)
             .SetTargetFps(60);
 
-        builder.Services.AddSingleton<IGameController, MainController>();
+        builder.Controllers.AddGameController<IMainController, MainController>();
+        builder.Controllers.SetMain<IMainController>();
         builder.Services.AddSingleton<IMainView, MainView>();
 
         IGameApplication gameApplication = builder.Build();
