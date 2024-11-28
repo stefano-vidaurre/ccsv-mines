@@ -2,6 +2,7 @@
 using CCSV.Mines.Domain.Models;
 using CCSV.Mines.Models;
 using CCSV.Mines.Views;
+using Raylib_cs;
 
 namespace CCSV.Mines.Controllers;
 
@@ -24,5 +25,23 @@ public class MainController : GameController<BallViewModel>, IMainController
             PosY = _ball.PosY,
             Radius = _ball.Radius,
         };
+    }
+
+    [KeyboardPressed((int) KeyboardKey.Left)]
+    public void OnLeftKeyPressed(long delta, bool firstUpdate)
+    {
+        if (firstUpdate)
+        {
+            _ball.MoveX(-1);
+        }
+    }
+
+    [KeyboardPressed((int)KeyboardKey.Right)]
+    public void OnRightKeyPressed(long delta, bool firstUpdate)
+    {
+        if (firstUpdate)
+        {
+            _ball.MoveX(1);
+        }
     }
 }

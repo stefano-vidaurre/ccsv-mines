@@ -12,6 +12,7 @@ public class RaylibApplicationBuilder : GameApplicationBuilder
     {
         IGameWindowBuilder windowBuilder = new RaylibWindowBuilder();
         IServiceCollection services = new ServiceCollection();
+        services.AddSingleton<IGameEventHandler, RaylibEventHandler>();
 
         return new RaylibApplicationBuilder(windowBuilder, services);
     }

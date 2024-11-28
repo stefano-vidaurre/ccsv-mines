@@ -18,6 +18,7 @@ public static class Program
 
         builder.Controllers.AddGameController<IMainController, MainController>();
         builder.Controllers.SetMain<IMainController>();
+
         builder.Services.AddSingleton<IMainView, MainView>();
 
         IGameApplication gameApplication = builder.Build();

@@ -1,36 +1,30 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-
-namespace CCSV.Games;
+﻿namespace CCSV.Games;
 
 public class GameApplication : IGameApplication
 {
     private readonly IGameWindow _window;
-    private readonly IServiceProvider _services;
-    private readonly IGameControllerProvider _controllers;
+    private readonly IGameEventHandler _gameEventHandler;
     private Task _updateTask;
 
-    public GameApplication(IGameWindow window, IServiceProvider services, IGameControllerProvider controllers)
+    public GameApplication(IGameWindow window, IGameEventHandler gameEventHandler)
     {
         _window = window;
-        _services = services;
-        _controllers = controllers;
         _updateTask = Task.CompletedTask;
+        _gameEventHandler = gameEventHandler;
     }
 
     public void Run()
     {
-        IGameController? gameController = _controllers.GetMain();
-
-        while (!_window.ShouldClose() && gameController is not null)
+        while (!_window.ShouldClose())
         {
             if (_updateTask.IsCompleted)
             {
-                _updateTask = gameController.Update();
+                _updateTask = _gameEventHandler.Update();
             }
 
             if (_window.IsNextFrame)
             {
-                gameController.Draw();
+                _gameEventHandler.Draw();
             }
         }
 

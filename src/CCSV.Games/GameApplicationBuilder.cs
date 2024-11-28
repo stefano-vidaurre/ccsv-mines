@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using CCSV.Domain.Exceptions;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace CCSV.Games;
 
@@ -22,10 +23,10 @@ public abstract class GameApplicationBuilder : IGameApplicationBuilder
         IGameWindow window = Window.Build();
 
         Services.AddSingleton(window);
-
+        Services.AddSingleton<IGameControllerProvider>((services) => new GameControllerProvider(services, Controllers));
+        Services.AddSingleton<IGameApplication, GameApplication>();
         IServiceProvider services = Services.BuildServiceProvider();
-        IGameControllerProvider controllers = new GameControllerProvider(services, Controllers);
 
-        return new GameApplication(window, services, controllers);
+        return services.GetService<IGameApplication>() ?? throw new BusinessException("Error building game application.");
     }
 }
