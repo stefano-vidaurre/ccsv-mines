@@ -27,44 +27,54 @@ public abstract class GameEventHandler : IGameEventHandler
 
     public Task Update()
     {
-        return Task.Run(() =>
+        MethodInfo[] methods = _gameController.GetType().GetMethods();
+        if (!_firstUpdate)
         {
-            MethodInfo[] methods = _gameController.GetType().GetMethods();
+            return Task.CompletedTask;
+        }
 
-            foreach (MethodInfo method in methods)
+        IList<Task> tasks = new List<Task>();
+
+        foreach (MethodInfo method in methods)
+        {
+            GameEventAttribute? attribute = Attribute.GetCustomAttribute(method, typeof(GameEventAttribute)) as GameEventAttribute;
+            if (attribute is null)
             {
-                GameEventAttribute? attribute = Attribute.GetCustomAttribute(method, typeof(GameEventAttribute)) as GameEventAttribute;
-                if (attribute is null)
-                {
-                    continue;
-                }
-
-                if(!HasToBeInvoked(attribute))
-                {
-                    continue;
-                }
-
-                if(method.GetParameters().Length == 0)
-                {
-                    method.Invoke(_gameController, null);
-                    continue;
-                }
-
-                if (method.GetParameters().Length == 1)
-                {
-                    method.Invoke(_gameController, [_window.Delta]);
-                    continue;
-                }
-
-                if (method.GetParameters().Length == 2)
-                {
-                    method.Invoke(_gameController, [_window.Delta, _firstUpdate]);
-                    continue;
-                }
+                continue;
             }
 
-            _firstUpdate = false;
-        });
+            if (!HasToBeInvoked(attribute))
+            {
+                continue;
+            }
+
+            if (method.GetParameters().Length == 0)
+            {
+                Task? task = method.Invoke(_gameController, null) as Task;
+
+                if (task is not null)
+                {
+                    tasks.Add(task);
+                }
+
+                continue;
+            }
+
+            if (method.GetParameters().Length == 1)
+            {
+                Task? task = method.Invoke(_gameController, [_window.LastDelta]) as Task;
+
+                if (task is not null)
+                {
+                    tasks.Add(task);
+                }
+
+                continue;
+            }
+        }
+        
+        _firstUpdate = false;
+        return Task.WhenAll(tasks);
     }
 
     protected abstract bool HasToBeInvoked(GameEventAttribute attribute);

@@ -14,7 +14,7 @@ public static class Program
         builder.Window
             .SetTitle("Mines")
             .SetSize(400, 400)
-            .SetTargetFps(60);
+            .SetTargetFps(240);
 
         builder.Controllers.AddGameController<IMainController, MainController>();
         builder.Controllers.SetMain<IMainController>();

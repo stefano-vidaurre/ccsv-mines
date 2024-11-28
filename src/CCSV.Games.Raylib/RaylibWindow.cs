@@ -92,4 +92,15 @@ public class RaylibWindow : IGameWindow
         RaylibService.CloseWindow();
         IsClosed = true;
     }
+
+    public void SetTargetFps(long fpsTarget)
+    {
+        if (fpsTarget < 1)
+        {
+            throw new WrongOperationException("Target FPS value cant be less than 1.");
+        }
+
+        TargetFps = fpsTarget;
+        TargetDelta = OneSecond / TargetFps;
+    }
 }

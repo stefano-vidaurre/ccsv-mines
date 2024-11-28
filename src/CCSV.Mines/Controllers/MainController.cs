@@ -8,13 +8,13 @@ namespace CCSV.Mines.Controllers;
 
 public class MainController : GameController<BallViewModel>, IMainController
 {
-    private readonly IMainView _mainView;
     private readonly Ball _ball;
+    private readonly IMainView _mainView;
 
     public MainController(IMainView mainView) : base(mainView)
     {
-        _mainView = mainView;
         _ball = Ball.Create(Guid.NewGuid(), 20, 80);
+        _mainView = mainView;
     }
 
     public override BallViewModel GetViewModel()
@@ -27,21 +27,39 @@ public class MainController : GameController<BallViewModel>, IMainController
         };
     }
 
-    [KeyboardPressed((int) KeyboardKey.Left)]
-    public void OnLeftKeyPressed(long delta, bool firstUpdate)
+    [KeyboardDown((int) KeyboardKey.Left)]
+    public void OnLeftKeyPressed(long delta)
     {
-        if (firstUpdate)
-        {
-            _ball.MoveX(-1);
-        }
+        int move = (int) (-1 * 240 * delta / TimeSpan.TicksPerSecond);
+        _ball.MoveX(move);
     }
 
-    [KeyboardPressed((int)KeyboardKey.Right)]
-    public void OnRightKeyPressed(long delta, bool firstUpdate)
+    [KeyboardDown((int)KeyboardKey.Right)]
+    public void OnRightKeyPressed(long delta)
     {
-        if (firstUpdate)
+        int move = (int) (1 * 240 * delta / TimeSpan.TicksPerSecond);
+        _ball.MoveX(move);
+    }
+
+    [KeyboardPressed((int)KeyboardKey.Up)]
+    public void OnUpKeyPressed()
+    {
+        if(_mainView.Window.TargetFps >= 240)
         {
-            _ball.MoveX(1);
+            return;
         }
+
+        _mainView.Window.SetTargetFps(_mainView.Window.TargetFps * 2);
+    }
+
+    [KeyboardPressed((int)KeyboardKey.Down)]
+    public void OnDownKeyPressed()
+    {
+        if (_mainView.Window.TargetFps <= 30)
+        {
+            return;
+        }
+
+        _mainView.Window.SetTargetFps(_mainView.Window.TargetFps / 2);
     }
 }

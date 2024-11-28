@@ -16,6 +16,8 @@ public interface IGameWindow
     public DateTime DrawingSince { get; }
     public long Delta { get; }
 
+    void SetTargetFps(long fpsTarget);
+
     void BeginDrawing();
     void EndDrawing();
     bool ShouldClose();
