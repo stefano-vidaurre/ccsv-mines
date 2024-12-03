@@ -2,18 +2,18 @@
 using System.Reflection;
 
 namespace CCSV.Games;
-public abstract class GameEventHandler : IGameEventHandler
+public class GameEventHandler : IGameEventHandler
 {
     private readonly IGameWindow _window;
     private readonly IGameControllerProvider _controllers;
     private readonly IGameController _gameController;
     private bool _firstUpdate;
 
-    protected GameEventHandler(IGameWindow window, IGameControllerProvider controllers)
+    public GameEventHandler(IGameWindow window, IGameControllerProvider controllers)
     {
         _window = window;
         _controllers = controllers;
-        _gameController = _controllers.GetMain() ?? throw new WrongOperationException("There is no main controller.");
+        _gameController = _controllers.GetMain() ?? throw new WrongOperationException("There is not main controller.");
         _firstUpdate = true;
     }
 
@@ -43,7 +43,7 @@ public abstract class GameEventHandler : IGameEventHandler
                 continue;
             }
 
-            if (!HasToBeInvoked(attribute))
+            if (!attribute.HasHappened())
             {
                 continue;
             }
@@ -76,6 +76,4 @@ public abstract class GameEventHandler : IGameEventHandler
         _firstUpdate = false;
         return Task.WhenAll(tasks);
     }
-
-    protected abstract bool HasToBeInvoked(GameEventAttribute attribute);
 }

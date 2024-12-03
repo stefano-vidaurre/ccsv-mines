@@ -1,4 +1,5 @@
 ﻿using CCSV.Games;
+using CCSV.Games.Raylib;
 using CCSV.Mines.Domain.Models;
 using CCSV.Mines.Models;
 using CCSV.Mines.Views;
@@ -27,21 +28,21 @@ public class MainController : GameController<BallViewModel>, IMainController
         };
     }
 
-    [KeyboardDown((int) KeyboardKey.Left)]
+    [KeyboardDown(KeyboardKey.Left)]
     public void OnLeftKeyPressed(long delta)
     {
         int move = (int) (-1 * 240 * delta / TimeSpan.TicksPerSecond);
         _ball.MoveX(move);
     }
 
-    [KeyboardDown((int)KeyboardKey.Right)]
+    [KeyboardDown(KeyboardKey.Right)]
     public void OnRightKeyPressed(long delta)
     {
         int move = (int) (1 * 240 * delta / TimeSpan.TicksPerSecond);
         _ball.MoveX(move);
     }
 
-    [KeyboardPressed((int)KeyboardKey.Up)]
+    [KeyboardPressed(KeyboardKey.Up)]
     public void OnUpKeyPressed()
     {
         if(_mainView.Window.TargetFps >= 240)
@@ -52,7 +53,7 @@ public class MainController : GameController<BallViewModel>, IMainController
         _mainView.Window.SetTargetFps(_mainView.Window.TargetFps * 2);
     }
 
-    [KeyboardPressed((int)KeyboardKey.Down)]
+    [KeyboardPressed(KeyboardKey.Down)]
     public void OnDownKeyPressed()
     {
         if (_mainView.Window.TargetFps <= 30)
