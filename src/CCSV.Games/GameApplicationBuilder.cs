@@ -22,7 +22,7 @@ public abstract class GameApplicationBuilder : IGameApplicationBuilder
 
     public IGameApplication Build()
     {
-        if(Window.MainView is null && Controllers.MainView is not null)
+        if (Window.MainView is null && Controllers.MainView is not null)
         {
             Type viewType = Controllers.MainView;
             Window.SetMainView(viewType);
@@ -31,7 +31,7 @@ public abstract class GameApplicationBuilder : IGameApplicationBuilder
         IGameWindow window = Window.Build();
         IGameControllerViewMatcher matcher = Controllers.BuildControllerViewMatcher();
 
-        Type? unregisteredView = matcher.Views.FirstOrDefault(view => !Services.Any(item => item.ServiceType.Equals(view)));
+        Type? unregisteredView = matcher.Views.FirstOrDefault(view => !IsRegistered(view));
 
         if (unregisteredView is not null)
         {
@@ -46,5 +46,10 @@ public abstract class GameApplicationBuilder : IGameApplicationBuilder
         IServiceProvider services = Services.BuildServiceProvider();
 
         return services.GetService<IGameApplication>() ?? throw new BusinessException("Error building game application.");
+    }
+
+    private bool IsRegistered(Type view)
+    {
+        return Services.Any(item => item.ServiceType.Equals(view));
     }
 }
