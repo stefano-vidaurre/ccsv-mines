@@ -5,21 +5,17 @@ namespace CCSV.Games;
 public class GameEventHandler : IGameEventHandler
 {
     private readonly IGameWindow _window;
-    private readonly IServiceProvider _services;
-    private readonly IGameControllerViewCollection _controllerViewCollection;
+    private readonly IGameControllerProvider _controllerProvider;
     private IGameController _gameController;
-    private Type _currentControllerType;
     private Type _currentViewType;
     private bool _firstUpdate;
 
-    public GameEventHandler(IGameWindow window, IServiceProvider services, IGameControllerViewCollection controllerViewCollection)
+    public GameEventHandler(IGameWindow window, IGameControllerProvider controllerProvider)
     {
         _window = window;
-        _services = services;
-        _controllerViewCollection = controllerViewCollection;
+        _controllerProvider = controllerProvider;
         _currentViewType = _window.CurrentViewType;
-        _currentControllerType = _controllerViewCollection.GetByView(_currentViewType) ?? throw new WrongOperationException($"View ({_currentViewType.Name}) is not registered in DI service.");
-        _gameController = _services.GetService(_currentControllerType) as IGameController ?? throw new WrongOperationException($"Controller ({_currentControllerType.Name}) is not registered in DI service.");
+        _gameController = _controllerProvider.GetGameController(_currentViewType);
         _firstUpdate = true;
     }
 
@@ -36,8 +32,7 @@ public class GameEventHandler : IGameEventHandler
         if(_currentViewType != _window.CurrentViewType)
         {
             _currentViewType = _window.CurrentViewType;
-            _currentControllerType = _controllerViewCollection.GetByView(_currentViewType) ?? throw new WrongOperationException($"View ({_currentViewType.Name}) is not registered in DI service.");
-            _gameController = _services.GetService(_currentControllerType) as IGameController ?? throw new WrongOperationException($"Controller ({_currentControllerType.Name}) is not registered in DI service.");
+            _gameController = _controllerProvider.GetGameController(_currentViewType);
         }
 
         MethodInfo[] methods = _gameController.GetType().GetMethods();

@@ -1,22 +1,16 @@
 ﻿using CCSV.Domain.Exceptions;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections;
-using System.Diagnostics.CodeAnalysis;
+using System.Collections.ObjectModel;
 using System.Reflection;
 
 namespace CCSV.Games;
-public class GameControllerCollection : IGameControllerCollection, IGameControllerViewCollection
+public class GameControllerCollection : IGameControllerCollection
 {
     private readonly IServiceCollection _services;
     private readonly IDictionary<Type, Type> _controllerViewsTypes;
 
-    public IEnumerable<Type> Keys => _controllerViewsTypes.Keys;
-
-    public IEnumerable<Type> Values => _controllerViewsTypes.Values;
-
-    public int Count => _controllerViewsTypes.Count;
-
-    public Type this[Type key] => _controllerViewsTypes[key];
+    public Type? MainView => _controllerViewsTypes.Keys.FirstOrDefault();
 
     public GameControllerCollection(IServiceCollection serviceDescriptors)
     {
@@ -57,7 +51,7 @@ public class GameControllerCollection : IGameControllerCollection, IGameControll
         return this;
     }
 
-    private Type? GetViewType(Type tcontroller)
+    private static Type? GetViewType(Type tcontroller)
     {
         ConstructorInfo[] ctors = tcontroller.GetConstructors();
 
@@ -98,33 +92,10 @@ public class GameControllerCollection : IGameControllerCollection, IGameControll
         return _controllerViewsTypes.Values.GetEnumerator();
     }
 
-    public bool ContainsKey(Type key)
+    public IGameControllerViewMatcher BuildControllerViewMatcher()
     {
-        return _controllerViewsTypes.ContainsKey(key);
-    }
+        ReadOnlyDictionary<Type, Type> dictionary = _controllerViewsTypes.AsReadOnly();
 
-    public bool TryGetValue(Type key, [MaybeNullWhen(false)] out Type value)
-    {
-        return _controllerViewsTypes.TryGetValue(key, out value);
-    }
-
-    IEnumerator<KeyValuePair<Type, Type>> IEnumerable<KeyValuePair<Type, Type>>.GetEnumerator()
-    {
-        return _controllerViewsTypes.GetEnumerator();
-    }
-
-    public Type? GetByView(Type tview)
-    {
-        if(!TryGetValue(tview, out Type? value))
-        {
-            return null;
-        }
-        
-        return value;
-    }
-
-    public Type? GetByView<TView>()
-    {
-        return GetByView(typeof(TView));
+        return new GameControllerViewMatcher(dictionary);
     }
 }

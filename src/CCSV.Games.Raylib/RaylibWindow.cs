@@ -108,6 +108,11 @@ public class RaylibWindow : IGameWindow
         CurrentViewType = typeof(TView);
     }
 
+    public void SetView<TView, TModel>() where TView : IGameView<TModel> where TModel : GameViewModel
+    {
+        CurrentViewType = typeof(TView);
+    }
+
     public void SetView(Type tview)
     {
         if (tview.GetInterface(nameof(IGameView)) is null && tview.GetInterface(typeof(IGameView<>).Name) is null)

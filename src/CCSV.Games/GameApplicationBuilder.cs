@@ -22,18 +22,20 @@ public abstract class GameApplicationBuilder : IGameApplicationBuilder
 
     public IGameApplication Build()
     {
-        if(Window.MainView is null && Controllers.Any())
+        if(Window.MainView is null && Controllers.MainView is not null)
         {
-            Type controllerType = _gameControllers.Keys.First();
-            Window.SetMainView(controllerType);
+            Type viewType = Controllers.MainView;
+            Window.SetMainView(viewType);
         }
 
         IGameWindow window = Window.Build();
+        IGameControllerViewMatcher matcher = Controllers.BuildControllerViewMatcher();
 
         Services.AddSingleton(window);
+        Services.AddSingleton(matcher);
         Services.AddSingleton<IGameApplication, GameApplication>();
         Services.AddSingleton<IGameEventHandler, GameEventHandler>();
-        Services.AddSingleton<IGameControllerViewCollection>(_gameControllers);
+        Services.AddSingleton<IGameControllerProvider, GameControllerProvider>();
         IServiceProvider services = Services.BuildServiceProvider();
 
         return services.GetService<IGameApplication>() ?? throw new BusinessException("Error building game application.");
