@@ -83,7 +83,7 @@ public class RaylibWindow : IGameWindow
 
     public void Close()
     {
-        if(IsClosed)
+        if (IsClosed)
         {
             return;
         }

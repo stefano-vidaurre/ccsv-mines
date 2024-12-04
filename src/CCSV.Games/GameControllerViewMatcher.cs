@@ -1,5 +1,4 @@
 ﻿using CCSV.Domain.Exceptions;
-using System.Reflection;
 
 namespace CCSV.Games;
 public class GameControllerViewMatcher : IGameControllerViewMatcher
@@ -17,12 +16,12 @@ public class GameControllerViewMatcher : IGameControllerViewMatcher
 
     public Type? GetByView(Type tview)
     {
-        if(!IsGameView(tview))
+        if (!IsGameView(tview))
         {
             throw new BusinessException($"Type ({tview.Name}) doesnt implemet {nameof(IGameView)} interface.");
         }
 
-        if(!_dictionary.TryGetValue(tview, out Type? result))
+        if (!_dictionary.TryGetValue(tview, out Type? result))
         {
             return null;
         }

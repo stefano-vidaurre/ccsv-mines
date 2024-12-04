@@ -31,9 +31,9 @@ public class MainController : GameController<BallViewModel>
     [KeyboardDown(KeyboardKey.Left)]
     public void OnLeftKeyDown(long delta)
     {
-        int move = (int) (-1 * 240 * delta / TimeSpan.TicksPerSecond);
+        int move = (int)(-1 * 240 * delta / TimeSpan.TicksPerSecond);
 
-        if(_ball.PosX + move < _ball.Radius)
+        if (_ball.PosX + move < _ball.Radius)
         {
             return;
         }
@@ -44,7 +44,7 @@ public class MainController : GameController<BallViewModel>
     [KeyboardDown(KeyboardKey.Right)]
     public void OnRightKeyDown(long delta)
     {
-        int move = (int) (1 * 240 * delta / TimeSpan.TicksPerSecond);
+        int move = (int)(1 * 240 * delta / TimeSpan.TicksPerSecond);
 
         if (_ball.PosX + move > _window.Width - _ball.Radius)
         {
@@ -57,7 +57,7 @@ public class MainController : GameController<BallViewModel>
     [KeyboardPressed(KeyboardKey.Up)]
     public void OnUpKeyPressed()
     {
-        if(_window.TargetFps >= 240)
+        if (_window.TargetFps >= 240)
         {
             return;
         }

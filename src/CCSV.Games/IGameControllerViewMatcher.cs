@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CCSV.Games;
+﻿namespace CCSV.Games;
 public interface IGameControllerViewMatcher
 {
-    IEnumerable<Type> Views {  get; }
+    IEnumerable<Type> Views { get; }
     IEnumerable<Type> Controllers { get; }
 
     Type? GetByView(Type tview);
