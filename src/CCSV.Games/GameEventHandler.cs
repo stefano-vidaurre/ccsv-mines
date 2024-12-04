@@ -5,15 +5,21 @@ namespace CCSV.Games;
 public class GameEventHandler : IGameEventHandler
 {
     private readonly IGameWindow _window;
-    private readonly IGameControllerProvider _controllers;
-    private readonly IGameController _gameController;
+    private readonly IServiceProvider _services;
+    private readonly IGameControllerViewCollection _controllerViewCollection;
+    private IGameController _gameController;
+    private Type _currentControllerType;
+    private Type _currentViewType;
     private bool _firstUpdate;
 
-    public GameEventHandler(IGameWindow window, IGameControllerProvider controllers)
+    public GameEventHandler(IGameWindow window, IServiceProvider services, IGameControllerViewCollection controllerViewCollection)
     {
         _window = window;
-        _controllers = controllers;
-        _gameController = _controllers.GetMain() ?? throw new WrongOperationException("There is not main controller.");
+        _services = services;
+        _controllerViewCollection = controllerViewCollection;
+        _currentViewType = _window.CurrentViewType;
+        _currentControllerType = _controllerViewCollection.GetByView(_currentViewType) ?? throw new WrongOperationException($"View ({_currentViewType.Name}) is not registered in DI service.");
+        _gameController = _services.GetService(_currentControllerType) as IGameController ?? throw new WrongOperationException($"Controller ({_currentControllerType.Name}) is not registered in DI service.");
         _firstUpdate = true;
     }
 
@@ -27,6 +33,13 @@ public class GameEventHandler : IGameEventHandler
 
     public Task Update()
     {
+        if(_currentViewType != _window.CurrentViewType)
+        {
+            _currentViewType = _window.CurrentViewType;
+            _currentControllerType = _controllerViewCollection.GetByView(_currentViewType) ?? throw new WrongOperationException($"View ({_currentViewType.Name}) is not registered in DI service.");
+            _gameController = _services.GetService(_currentControllerType) as IGameController ?? throw new WrongOperationException($"Controller ({_currentControllerType.Name}) is not registered in DI service.");
+        }
+
         MethodInfo[] methods = _gameController.GetType().GetMethods();
         if (!_firstUpdate)
         {

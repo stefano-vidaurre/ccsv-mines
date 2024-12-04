@@ -11,12 +11,15 @@ public interface IGameWindow
     public long LastDelta { get; }
     public bool IsClosed { get; }
     public bool IsDrawing { get; }
+    public Type CurrentViewType { get; }
 
     public bool IsNextFrame { get; }
     public DateTime DrawingSince { get; }
     public long Delta { get; }
 
     void SetTargetFps(long fpsTarget);
+    void SetView<TView>() where TView : IGameView;
+    void SetView(Type tcontroller);
 
     void BeginDrawing();
     void EndDrawing();

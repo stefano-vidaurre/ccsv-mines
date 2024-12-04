@@ -19,25 +19,13 @@ public class RaylibWindow : IGameWindow
     public DateTime DrawingSince { get; private set; }
     public bool IsClosed { get; private set; }
     public bool IsDrawing { get; private set; }
+    public Type CurrentViewType { get; private set; }
 
     public long Fps => OneSecond / LastDelta;
     public long Delta => DateTime.UtcNow.Ticks - DrawingSince.Ticks;
-    public bool IsNextFrame => Delta > TargetDelta;
+    public bool IsNextFrame => (Delta > TargetDelta) && !IsClosed;
 
-    private RaylibWindow()
-    {
-        Title = "";
-        Width = 0;
-        Height = 0;
-        TargetFps = 60;
-        TargetDelta = OneSecond / TargetFps;
-        LastDelta = TargetDelta;
-        IsDrawing = false;
-        IsClosed = false;
-        DrawingSince = DateTime.UtcNow;
-    }
-
-    private RaylibWindow(string title, int width, int height, long targetFps)
+    private RaylibWindow(string title, int width, int height, long targetFps, Type currentControllerType)
     {
         Title = title;
         Width = width;
@@ -48,10 +36,11 @@ public class RaylibWindow : IGameWindow
         IsDrawing = false;
         IsClosed = false;
         DrawingSince = DateTime.UtcNow;
+        CurrentViewType = currentControllerType;
         RaylibService.InitWindow(width, height, title);
     }
 
-    public static IGameWindow Create(string title, int width, int height, long targetFps)
+    public static IGameWindow Create(string title, int width, int height, long targetFps, Type currentControllerType)
     {
         if (_instance is not null)
         {
@@ -64,7 +53,7 @@ public class RaylibWindow : IGameWindow
             throw new WrongOperationException("Target FPS value cant be less than 1.");
         }
 
-        _instance = new RaylibWindow(title, width, height, targetFps);
+        _instance = new RaylibWindow(title, width, height, targetFps, currentControllerType);
         return _instance;
     }
 
@@ -84,11 +73,21 @@ public class RaylibWindow : IGameWindow
 
     public bool ShouldClose()
     {
+        if (IsClosed)
+        {
+            return true;
+        }
+
         return RaylibService.WindowShouldClose();
     }
 
     public void Close()
     {
+        if(IsClosed)
+        {
+            return;
+        }
+
         RaylibService.CloseWindow();
         IsClosed = true;
     }
@@ -102,5 +101,20 @@ public class RaylibWindow : IGameWindow
 
         TargetFps = fpsTarget;
         TargetDelta = OneSecond / TargetFps;
+    }
+
+    public void SetView<TView>() where TView : IGameView
+    {
+        CurrentViewType = typeof(TView);
+    }
+
+    public void SetView(Type tview)
+    {
+        if (tview.GetInterface(nameof(IGameView)) is null && tview.GetInterface(typeof(IGameView<>).Name) is null)
+        {
+            throw new InvalidValueException($"The type ({nameof(tview)}) doesnt implement the {nameof(IGameView)} interface.");
+        }
+
+        CurrentViewType = tview;
     }
 }

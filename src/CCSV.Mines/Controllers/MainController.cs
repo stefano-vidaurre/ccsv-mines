@@ -7,7 +7,7 @@ using Raylib_cs;
 
 namespace CCSV.Mines.Controllers;
 
-public class MainController : GameController<BallViewModel>, IMainController
+public class MainController : GameController<BallViewModel>
 {
     private readonly Ball _ball;
     private readonly IMainView _mainView;
@@ -29,14 +29,14 @@ public class MainController : GameController<BallViewModel>, IMainController
     }
 
     [KeyboardDown(KeyboardKey.Left)]
-    public void OnLeftKeyPressed(long delta)
+    public void OnLeftKeyDown(long delta)
     {
         int move = (int) (-1 * 240 * delta / TimeSpan.TicksPerSecond);
         _ball.MoveX(move);
     }
 
     [KeyboardDown(KeyboardKey.Right)]
-    public void OnRightKeyPressed(long delta)
+    public void OnRightKeyDown(long delta)
     {
         int move = (int) (1 * 240 * delta / TimeSpan.TicksPerSecond);
         _ball.MoveX(move);
@@ -62,5 +62,11 @@ public class MainController : GameController<BallViewModel>, IMainController
         }
 
         _mainView.Window.SetTargetFps(_mainView.Window.TargetFps / 2);
+    }
+
+    [KeyboardPressed(KeyboardKey.Escape)]
+    public void OnEscapeKeyPressed()
+    {
+        _mainView.Window.Close();
     }
 }
