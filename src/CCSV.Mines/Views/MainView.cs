@@ -5,19 +5,19 @@ using Raylib_cs;
 namespace CCSV.Mines.Views;
 public class MainView : IMainView
 {
-    public IGameWindow Window { get; private set; }
+    private readonly IGameWindow _window;
 
     public MainView(IGameWindow window)
     {
-        Window = window;
+        _window = window;
     }
 
     public void Draw(BallViewModel model)
     {
-        long fps = Window.Fps;
-        long targetFps = Window.TargetFps;
-        long delta = Window.LastDelta;
-        long targetDelta = Window.TargetDelta;
+        long fps = _window.Fps;
+        long targetFps = _window.TargetFps;
+        long delta = _window.LastDelta;
+        long targetDelta = _window.TargetDelta;
 
         Raylib.ClearBackground(Color.White);
         Raylib.DrawText($"FPS: {fps}/{targetFps}", 12, 12, 20, Color.Black);

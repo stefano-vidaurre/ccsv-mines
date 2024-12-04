@@ -10,12 +10,12 @@ namespace CCSV.Mines.Controllers;
 public class MainController : GameController<BallViewModel>
 {
     private readonly Ball _ball;
-    private readonly IMainView _mainView;
+    private readonly IGameWindow _window;
 
-    public MainController(IMainView mainView) : base(mainView)
+    public MainController(IMainView mainView, IGameWindow window) : base(mainView)
     {
         _ball = Ball.Create(Guid.NewGuid(), 20, 80);
-        _mainView = mainView;
+        _window = window;
     }
 
     public override BallViewModel GetViewModel()
@@ -32,6 +32,12 @@ public class MainController : GameController<BallViewModel>
     public void OnLeftKeyDown(long delta)
     {
         int move = (int) (-1 * 240 * delta / TimeSpan.TicksPerSecond);
+
+        if(_ball.PosX + move < _ball.Radius)
+        {
+            return;
+        }
+
         _ball.MoveX(move);
     }
 
@@ -39,34 +45,40 @@ public class MainController : GameController<BallViewModel>
     public void OnRightKeyDown(long delta)
     {
         int move = (int) (1 * 240 * delta / TimeSpan.TicksPerSecond);
+
+        if (_ball.PosX + move > _window.Width - _ball.Radius)
+        {
+            return;
+        }
+
         _ball.MoveX(move);
     }
 
     [KeyboardPressed(KeyboardKey.Up)]
     public void OnUpKeyPressed()
     {
-        if(_mainView.Window.TargetFps >= 240)
+        if(_window.TargetFps >= 240)
         {
             return;
         }
 
-        _mainView.Window.SetTargetFps(_mainView.Window.TargetFps * 2);
+        _window.SetTargetFps(_window.TargetFps * 2);
     }
 
     [KeyboardPressed(KeyboardKey.Down)]
     public void OnDownKeyPressed()
     {
-        if (_mainView.Window.TargetFps <= 30)
+        if (_window.TargetFps <= 30)
         {
             return;
         }
 
-        _mainView.Window.SetTargetFps(_mainView.Window.TargetFps / 2);
+        _window.SetTargetFps(_window.TargetFps / 2);
     }
 
     [KeyboardPressed(KeyboardKey.Escape)]
     public void OnEscapeKeyPressed()
     {
-        _mainView.Window.Close();
+        _window.Close();
     }
 }
