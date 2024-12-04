@@ -30,6 +30,11 @@ public class GameControllerCollection : IGameControllerCollection
             throw new WrongOperationException($"Controller ({nameof(TController)}) has not any view.");
         }
 
+        if(_controllerViewsTypes.ContainsKey(viewType))
+        {
+            throw new WrongOperationException($"View ({viewType.Name}) is already in use by other controller ({_controllerViewsTypes[viewType].Name}).");
+        }
+
         _services.AddScoped<TController, TImplementation>();
         _controllerViewsTypes.Add(viewType, controllerType);
         return this;
@@ -44,6 +49,11 @@ public class GameControllerCollection : IGameControllerCollection
         if (viewType is null)
         {
             throw new WrongOperationException($"Controller ({nameof(TController)}) has not any view.");
+        }
+
+        if (_controllerViewsTypes.ContainsKey(viewType))
+        {
+            throw new WrongOperationException($"View ({viewType.Name}) is already in use by other controller ({_controllerViewsTypes[viewType].Name}).");
         }
 
         _services.AddScoped<TController>();
@@ -63,18 +73,12 @@ public class GameControllerCollection : IGameControllerCollection
         ConstructorInfo constructorInfo = ctors[0];
         ParameterInfo? viewParameter = Array.Find(constructorInfo.GetParameters(), param => IsGameView(param));
 
-        if (viewParameter is not null)
-        {
-            return viewParameter.ParameterType;
-        }
-
-        GameViewAttribute? attribute = Attribute.GetCustomAttribute(tcontroller, typeof(GameViewAttribute)) as GameViewAttribute;
-        if (attribute is null)
+        if (viewParameter is null)
         {
             throw new WrongOperationException($"Controller ({tcontroller.Name}) has not any view.");
         }
 
-        return attribute.ViewType;
+        return viewParameter.ParameterType;
     }
 
     private static bool IsGameView(ParameterInfo param)
