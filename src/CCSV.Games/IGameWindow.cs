@@ -18,9 +18,9 @@ public interface IGameWindow
     public long Delta { get; }
 
     void SetTargetFps(long fpsTarget);
-    void SetView<TView>() where TView : IGameView;
+    void NextView<TView>() where TView : IGameView;
     void NextView<TView, TModel>() where TView : IGameView<TModel> where TModel : GameViewModel;
-    void SetView(Type tcontroller);
+    void NextView(Type tcontroller);
 
     void BeginDrawing();
     void EndDrawing();

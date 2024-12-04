@@ -103,7 +103,7 @@ public class RaylibWindow : IGameWindow
         TargetDelta = OneSecond / TargetFps;
     }
 
-    public void SetView<TView>() where TView : IGameView
+    public void NextView<TView>() where TView : IGameView
     {
         CurrentViewType = typeof(TView);
     }
@@ -113,7 +113,7 @@ public class RaylibWindow : IGameWindow
         CurrentViewType = typeof(TView);
     }
 
-    public void SetView(Type tview)
+    public void NextView(Type tview)
     {
         if (tview.GetInterface(nameof(IGameView)) is null && tview.GetInterface(typeof(IGameView<>).Name) is null)
         {
