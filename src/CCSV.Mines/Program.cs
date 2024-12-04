@@ -17,8 +17,10 @@ public static class Program
             .SetTargetFps(60);
 
         builder.Controllers.AddGameController<MainController>();
+        builder.Controllers.AddGameController<OtherController>();
 
-        builder.Services.AddSingleton<IMainView, MainView>();
+        builder.Services.AddScoped<IMainView, MainView>();
+        builder.Services.AddScoped<IOtherView, OtherView>();
 
         IGameApplication gameApplication = builder.Build();
         gameApplication.Run();

@@ -1,5 +1,4 @@
-﻿using CCSV.Domain.Exceptions;
-using System.Reflection;
+﻿using System.Reflection;
 
 namespace CCSV.Games;
 public class GameEventHandler : IGameEventHandler
@@ -15,7 +14,7 @@ public class GameEventHandler : IGameEventHandler
         _window = window;
         _controllerProvider = controllerProvider;
         _currentViewType = _window.CurrentViewType;
-        _gameController = _controllerProvider.GetGameController(_currentViewType);
+        _gameController = _controllerProvider.BuildController(_currentViewType);
         _firstUpdate = true;
     }
 
@@ -29,10 +28,10 @@ public class GameEventHandler : IGameEventHandler
 
     public Task Update()
     {
-        if(_currentViewType != _window.CurrentViewType)
+        if (_currentViewType != _window.CurrentViewType)
         {
             _currentViewType = _window.CurrentViewType;
-            _gameController = _controllerProvider.GetGameController(_currentViewType);
+            _gameController = _controllerProvider.BuildController(_currentViewType);
         }
 
         MethodInfo[] methods = _gameController.GetType().GetMethods();
@@ -80,7 +79,7 @@ public class GameEventHandler : IGameEventHandler
                 continue;
             }
         }
-        
+
         _firstUpdate = false;
         return Task.WhenAll(tasks);
     }

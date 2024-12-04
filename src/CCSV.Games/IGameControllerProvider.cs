@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace CCSV.Games;
 public interface IGameControllerProvider
 {
-    IGameController GetGameController<TView>() where TView : IGameView;
-    IGameController GetGameController<TView, TModel>() where TView : IGameView<TModel> where TModel : GameViewModel;
-    IGameController GetGameController(Type tview);
+    IGameController BuildController<TView>() where TView : IGameView;
+    IGameController BuildController<TView, TModel>() where TView : IGameView<TModel> where TModel : GameViewModel;
+    IGameController BuildController(Type tview);
 }

@@ -30,7 +30,7 @@ public class GameControllerCollection : IGameControllerCollection
             throw new WrongOperationException($"Controller ({nameof(TController)}) has not any view.");
         }
 
-        _services.AddSingleton<TController, TImplementation>();
+        _services.AddScoped<TController, TImplementation>();
         _controllerViewsTypes.Add(viewType, controllerType);
         return this;
     }
@@ -46,7 +46,7 @@ public class GameControllerCollection : IGameControllerCollection
             throw new WrongOperationException($"Controller ({nameof(TController)}) has not any view.");
         }
 
-        _services.AddSingleton<TController>();
+        _services.AddScoped<TController>();
         _controllerViewsTypes.Add(viewType, controllerType);
         return this;
     }

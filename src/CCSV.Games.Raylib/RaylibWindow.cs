@@ -108,7 +108,7 @@ public class RaylibWindow : IGameWindow
         CurrentViewType = typeof(TView);
     }
 
-    public void SetView<TView, TModel>() where TView : IGameView<TModel> where TModel : GameViewModel
+    public void NextView<TView, TModel>() where TView : IGameView<TModel> where TModel : GameViewModel
     {
         CurrentViewType = typeof(TView);
     }

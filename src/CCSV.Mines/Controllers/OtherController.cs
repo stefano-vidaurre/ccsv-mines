@@ -6,13 +6,12 @@ using CCSV.Mines.Views;
 using Raylib_cs;
 
 namespace CCSV.Mines.Controllers;
-
-public class MainController : GameController<BallViewModel>
+public class OtherController : GameController<BallViewModel>
 {
     private readonly Ball _ball;
     private readonly IGameWindow _window;
 
-    public MainController(IMainView mainView, IGameWindow window) : base(mainView)
+    public OtherController(IOtherView otherView, IGameWindow window) : base(otherView)
     {
         _ball = Ball.Create(Guid.NewGuid(), 20, 80);
         _window = window;
@@ -31,9 +30,9 @@ public class MainController : GameController<BallViewModel>
     [KeyboardDown(KeyboardKey.Left)]
     public void OnLeftKeyDown(long delta)
     {
-        int move = (int) (-1 * 240 * delta / TimeSpan.TicksPerSecond);
+        int move = (int)(-1 * 240 * delta / TimeSpan.TicksPerSecond);
 
-        if(_ball.PosX + move < _ball.Radius)
+        if (_ball.PosX + move < _ball.Radius)
         {
             return;
         }
@@ -44,7 +43,7 @@ public class MainController : GameController<BallViewModel>
     [KeyboardDown(KeyboardKey.Right)]
     public void OnRightKeyDown(long delta)
     {
-        int move = (int) (1 * 240 * delta / TimeSpan.TicksPerSecond);
+        int move = (int)(1 * 240 * delta / TimeSpan.TicksPerSecond);
 
         if (_ball.PosX + move > _window.Width - _ball.Radius)
         {
@@ -57,7 +56,7 @@ public class MainController : GameController<BallViewModel>
     [KeyboardPressed(KeyboardKey.Up)]
     public void OnUpKeyPressed()
     {
-        if(_window.TargetFps >= 240)
+        if (_window.TargetFps >= 240)
         {
             return;
         }
@@ -79,7 +78,7 @@ public class MainController : GameController<BallViewModel>
     [KeyboardPressed(KeyboardKey.Z)]
     public void OnZKeyPressed()
     {
-        _window.NextView<IOtherView, BallViewModel>();
+        _window.NextView<IMainView, BallViewModel>();
     }
 
     [KeyboardPressed(KeyboardKey.Escape)]
