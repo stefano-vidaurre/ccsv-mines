@@ -31,6 +31,13 @@ public abstract class GameApplicationBuilder : IGameApplicationBuilder
         IGameWindow window = Window.Build();
         IGameControllerViewMatcher matcher = Controllers.BuildControllerViewMatcher();
 
+        Type? unregisteredView = matcher.Views.FirstOrDefault(view => !Services.Any(item => item.ServiceType.Equals(view)));
+
+        if (unregisteredView is not null)
+        {
+            throw new WrongOperationException($"The view {unregisteredView.Name} is not registered in DI.");
+        }
+
         Services.AddSingleton(window);
         Services.AddSingleton(matcher);
         Services.AddSingleton<IGameApplication, GameApplication>();

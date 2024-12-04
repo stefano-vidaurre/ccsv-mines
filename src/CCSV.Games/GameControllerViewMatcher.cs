@@ -6,6 +6,10 @@ public class GameControllerViewMatcher : IGameControllerViewMatcher
 {
     private readonly IReadOnlyDictionary<Type, Type> _dictionary;
 
+    public IEnumerable<Type> Views => _dictionary.Keys.AsEnumerable();
+
+    public IEnumerable<Type> Controllers => _dictionary.Values.AsEnumerable();
+
     public GameControllerViewMatcher(IReadOnlyDictionary<Type, Type> dictionary)
     {
         _dictionary = dictionary;
