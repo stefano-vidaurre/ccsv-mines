@@ -1,17 +1,20 @@
-﻿using System.Reflection;
+﻿using Microsoft.Extensions.Logging;
+using System.Reflection;
 
 namespace CCSV.Games;
 public class GameEventHandler : IGameEventHandler
 {
+    private readonly ILogger<GameEventHandler> _logger;
     private readonly IGameWindow _window;
     private readonly IGameControllerProvider _controllerProvider;
     private IGameController _gameController;
     private Type _currentViewType;
     private bool _firstUpdate;
 
-    public GameEventHandler(IGameWindow window, IGameControllerProvider controllerProvider)
+    public GameEventHandler(IGameWindow window, IGameControllerProvider controllerProvider, ILogger<GameEventHandler> logger)
     {
         _window = window;
+        _logger = logger;
         _controllerProvider = controllerProvider;
         _currentViewType = _window.CurrentViewType;
         _gameController = _controllerProvider.BuildController(_currentViewType);
@@ -30,6 +33,7 @@ public class GameEventHandler : IGameEventHandler
     {
         if (_currentViewType != _window.CurrentViewType)
         {
+            _logger.LogInformation("Changing the view: {0} -> {1}", _currentViewType.Name, _window.CurrentViewType.Name);
             _currentViewType = _window.CurrentViewType;
             _gameController = _controllerProvider.BuildController(_currentViewType);
         }
@@ -54,6 +58,8 @@ public class GameEventHandler : IGameEventHandler
             {
                 continue;
             }
+
+            _logger.LogTrace("[{0}] event has happened", attribute.Name);
 
             if (method.GetParameters().Length == 0)
             {

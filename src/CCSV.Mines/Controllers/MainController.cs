@@ -3,6 +3,7 @@ using CCSV.Games.Raylib;
 using CCSV.Mines.Domain.Models;
 using CCSV.Mines.Models;
 using CCSV.Mines.Views;
+using Microsoft.Extensions.Logging;
 using Raylib_cs;
 
 namespace CCSV.Mines.Controllers;
