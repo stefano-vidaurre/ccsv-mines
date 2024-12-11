@@ -65,7 +65,7 @@ public class RaylibWindowBuilder : IGameWindowBuilder
 
     public IGameWindowBuilder SetMainView(Type tview)
     {
-        if (tview.GetInterface(nameof(IGameView)) is null && tview.GetInterface(typeof(IGameView<>).Name) is null)
+        if (tview.GetInterface(nameof(IGameView)) is null)
         {
             throw new InvalidValueException($"The type ({tview.Name}) doesnt implement the {nameof(IGameView)} interface.");
         }

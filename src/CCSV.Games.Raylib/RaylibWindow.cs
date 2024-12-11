@@ -108,14 +108,9 @@ public class RaylibWindow : IGameWindow
         CurrentViewType = typeof(TView);
     }
 
-    public void NextView<TView, TModel>() where TView : IGameView<TModel> where TModel : GameViewModel
-    {
-        CurrentViewType = typeof(TView);
-    }
-
     public void NextView(Type tview)
     {
-        if (tview.GetInterface(nameof(IGameView)) is null && tview.GetInterface(typeof(IGameView<>).Name) is null)
+        if (tview.GetInterface(nameof(IGameView)) is null)
         {
             throw new InvalidValueException($"The type ({nameof(tview)}) doesnt implement the {nameof(IGameView)} interface.");
         }

@@ -12,6 +12,11 @@ public class OtherView : IOtherView
         _window = window;
     }
 
+    public void Draw()
+    {
+        Raylib.ClearBackground(Color.Black);
+    }
+
     public void Draw(BallViewModel model)
     {
         long fps = _window.Fps;
@@ -19,7 +24,6 @@ public class OtherView : IOtherView
         long delta = _window.LastDelta;
         long targetDelta = _window.TargetDelta;
 
-        Raylib.ClearBackground(Color.Black);
         Raylib.DrawText($"FPS: {fps}/{targetFps}", 12, 12, 20, Color.White);
         Raylib.DrawText($"Delta: {delta}/{targetDelta}", 12, 42, 20, Color.White);
         Raylib.DrawCircle(model.PosX, model.PosY, model.Radius, Color.White);

@@ -78,7 +78,7 @@ public class OtherController : GameController<BallViewModel>
     [KeyboardPressed(KeyboardKey.Z)]
     public void OnZKeyPressed()
     {
-        _window.NextView<IMainView, BallViewModel>();
+        _window.NextView<IMainView>();
     }
 
     [KeyboardPressed(KeyboardKey.Escape)]

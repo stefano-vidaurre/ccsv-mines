@@ -6,5 +6,4 @@ public interface IGameControllerViewMatcher
 
     Type? GetByView(Type tview);
     Type? GetByView<TView>() where TView : IGameView;
-    Type? GetByView<TView, TModel>() where TView : IGameView<TModel> where TModel : GameViewModel;
 }

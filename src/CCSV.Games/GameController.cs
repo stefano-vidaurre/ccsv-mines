@@ -27,6 +27,7 @@ public abstract class GameController<Vmodel> : IGameController<Vmodel> where Vmo
     public void Draw()
     {
         Vmodel model = GetViewModel();
+        _gameView.Draw();
         _gameView.Draw(model);
     }
 }

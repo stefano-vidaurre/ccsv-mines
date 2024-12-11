@@ -83,7 +83,7 @@ public class GameControllerCollection : IGameControllerCollection
 
     private static bool IsGameView(ParameterInfo param)
     {
-        return !(param.ParameterType.GetInterface(nameof(IGameView)) is null && param.ParameterType.GetInterface(typeof(IGameView<>).Name) is null);
+        return param.ParameterType.GetInterface(nameof(IGameView)) is not null;
     }
 
     public IEnumerator<Type> GetEnumerator()

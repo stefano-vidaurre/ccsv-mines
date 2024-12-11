@@ -34,13 +34,8 @@ public class GameControllerViewMatcher : IGameControllerViewMatcher
         return GetByView(typeof(TView));
     }
 
-    public Type? GetByView<TView, TModel>() where TView : IGameView<TModel> where TModel : GameViewModel
-    {
-        return GetByView(typeof(TView));
-    }
-
     private static bool IsGameView(Type type)
     {
-        return !(type.GetInterface(nameof(IGameView)) is null && type.GetInterface(typeof(IGameView<>).Name) is null);
+        return type.GetInterface(nameof(IGameView)) is not null;
     }
 }

@@ -31,23 +31,6 @@ public class GameControllerProvider : IGameControllerProvider
         return _serviceScope.ServiceProvider.GetService(controllerType) as IGameController ?? throw new BusinessException($"The controller ({controllerType.Name}) doesnt implement {nameof(IGameController)} interface.");
     }
 
-    public IGameController BuildController<TView, TModel>()
-        where TView : IGameView<TModel>
-        where TModel : GameViewModel
-    {
-        Type? controllerType = _matcher.GetByView<TView, TModel>();
-
-        if (controllerType is null)
-        {
-            throw new BusinessException($"The view ({nameof(TView)}) has not any controller.");
-        }
-
-        _serviceScope.Dispose();
-        _serviceScope = _serviceProvider.CreateScope();
-
-        return _serviceScope.ServiceProvider.GetService(controllerType) as IGameController ?? throw new BusinessException($"The controller ({controllerType.Name}) doesnt implement {nameof(IGameController)} interface.");
-    }
-
     public IGameController BuildController(Type tview)
     {
         Type? controllerType = _matcher.GetByView(tview);

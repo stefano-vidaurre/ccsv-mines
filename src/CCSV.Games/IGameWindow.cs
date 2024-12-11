@@ -19,7 +19,6 @@ public interface IGameWindow
 
     void SetTargetFps(long fpsTarget);
     void NextView<TView>() where TView : IGameView;
-    void NextView<TView, TModel>() where TView : IGameView<TModel> where TModel : GameViewModel;
     void NextView(Type tcontroller);
 
     void BeginDrawing();
