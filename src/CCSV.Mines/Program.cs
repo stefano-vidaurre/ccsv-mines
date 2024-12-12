@@ -16,13 +16,12 @@ public static class Program
             .SetSize(640, 480)
             .SetTargetFps(60);
 
-        builder.Controllers.AddGameController<MainController>();
-        builder.Controllers.AddGameController<OtherController>();
+        builder.Services.AddScoped<MainController>();
+        builder.Services.AddScoped<OtherController>();
+        builder.Services.AddScoped<MainView>();
+        builder.Services.AddScoped<OtherView>();
 
-        builder.Services.AddScoped<IMainView, MainView>();
-        builder.Services.AddScoped<IOtherView, OtherView>();
-
-        IGameApplication gameApplication = builder.Build();
+        IGameApplication gameApplication = builder.Build<MainView>();
         gameApplication.Run();
     }
 }

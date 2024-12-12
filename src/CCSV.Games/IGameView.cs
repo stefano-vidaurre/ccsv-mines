@@ -1,6 +1,10 @@
 ﻿namespace CCSV.Games;
 public interface IGameView
 {
+#pragma warning disable IDE1006 // Estilos de nombres
+    internal void __Draw();
+    internal IGameController? __Controller { get; }
+#pragma warning restore IDE1006 // Estilos de nombres
     void Draw();
 }
 

@@ -6,18 +6,18 @@ using CCSV.Mines.Views;
 using Raylib_cs;
 
 namespace CCSV.Mines.Controllers;
-public class OtherController : GameController<BallViewModel>
+public class OtherController : IGameController<BallViewModel>
 {
     private readonly Ball _ball;
     private readonly IGameWindow _window;
 
-    public OtherController(IOtherView otherView, IGameWindow window) : base(otherView)
+    public OtherController(IGameWindow window)
     {
         _ball = Ball.Create(Guid.NewGuid(), 20, 80);
         _window = window;
     }
 
-    public override BallViewModel GetFirstLayerViewModel()
+    public BallViewModel GetFirstLayerViewModel()
     {
         return new BallViewModel()
         {
@@ -78,7 +78,7 @@ public class OtherController : GameController<BallViewModel>
     [KeyboardPressed(KeyboardKey.Z)]
     public void OnZKeyPressed()
     {
-        _window.NextView<IMainView>();
+        _window.NextView<MainView>();
     }
 
     [KeyboardPressed(KeyboardKey.Escape)]

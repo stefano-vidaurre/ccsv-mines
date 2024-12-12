@@ -1,30 +1,36 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using CCSV.Domain.Exceptions;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System.Reflection;
 
 namespace CCSV.Games;
 public class GameEventHandler : IGameEventHandler
 {
     private readonly ILogger<GameEventHandler> _logger;
+    private readonly IServiceProvider _serviceProvider;
     private readonly IGameWindow _window;
-    private readonly IGameControllerProvider _controllerProvider;
-    private IGameController _gameController;
+    private IGameController? _gameController;
+    private IServiceScope _serviceScope;
+    private IGameView _gameView;
     private Type _currentViewType;
     private bool _firstUpdate;
 
-    public GameEventHandler(IGameWindow window, IGameControllerProvider controllerProvider, ILogger<GameEventHandler> logger)
+    public GameEventHandler(IGameWindow window, IServiceProvider serviceProvider, ILogger<GameEventHandler> logger)
     {
         _window = window;
+        _serviceProvider = serviceProvider;
         _logger = logger;
-        _controllerProvider = controllerProvider;
         _currentViewType = _window.CurrentViewType;
-        _gameController = _controllerProvider.BuildController(_currentViewType);
+        _serviceScope = _serviceProvider.CreateScope();
+        _gameView = _serviceScope.ServiceProvider.GetService(_currentViewType) as IGameView ?? throw new BusinessException();
+        _gameController = _gameView.__Controller;
         _firstUpdate = true;
     }
 
     public void Draw()
     {
         _window.BeginDrawing();
-        _gameController.Draw();
+        _gameView.__Draw();
         _window.EndDrawing();
         _firstUpdate = true;
     }
@@ -34,8 +40,16 @@ public class GameEventHandler : IGameEventHandler
         if (_currentViewType != _window.CurrentViewType)
         {
             _logger.LogInformation("Changing the view: {0} -> {1}", _currentViewType.Name, _window.CurrentViewType.Name);
+            _serviceScope.Dispose();
+            _serviceScope = _serviceProvider.CreateScope();
             _currentViewType = _window.CurrentViewType;
-            _gameController = _controllerProvider.BuildController(_currentViewType);
+            _gameView = _serviceScope.ServiceProvider.GetService(_currentViewType) as IGameView ?? throw new BusinessException();
+            _gameController = _gameView.__Controller;
+        }
+
+        if(_gameController is null)
+        {
+            return Task.CompletedTask;
         }
 
         MethodInfo[] methods = _gameController.GetType().GetMethods();

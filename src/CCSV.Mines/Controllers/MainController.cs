@@ -3,23 +3,22 @@ using CCSV.Games.Raylib;
 using CCSV.Mines.Domain.Models;
 using CCSV.Mines.Models;
 using CCSV.Mines.Views;
-using Microsoft.Extensions.Logging;
 using Raylib_cs;
 
 namespace CCSV.Mines.Controllers;
 
-public class MainController : GameController<BallViewModel>
+public class MainController : IGameController<BallViewModel>
 {
     private readonly Ball _ball;
     private readonly IGameWindow _window;
 
-    public MainController(IMainView mainView, IGameWindow window) : base(mainView)
+    public MainController(IGameWindow window)
     {
         _ball = Ball.Create(Guid.NewGuid(), 20, 80);
         _window = window;
     }
 
-    public override BallViewModel GetFirstLayerViewModel()
+    public BallViewModel GetFirstLayerViewModel()
     {
         return new BallViewModel()
         {
@@ -80,7 +79,7 @@ public class MainController : GameController<BallViewModel>
     [KeyboardPressed(KeyboardKey.Z)]
     public void OnZKeyPressed()
     {
-        _window.NextView<IOtherView>();
+        _window.NextView<OtherView>();
     }
 
     [KeyboardPressed(KeyboardKey.Escape)]

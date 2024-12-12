@@ -9,25 +9,17 @@ public class RaylibWindowBuilder : IGameWindowBuilder
     private int _height;
     private long _targetFps;
 
-    public Type? MainView { get; private set; }
-
     public RaylibWindowBuilder()
     {
         _title = "Window title";
         _width = 800;
         _height = 480;
         _targetFps = 60;
-        MainView = null;
     }
 
-    public IGameWindow Build()
+    public IGameWindow Build<TView>() where TView : IGameView
     {
-        if (MainView is null)
-        {
-            throw new BusinessException("Main controller is not setted.");
-        }
-
-        return RaylibWindow.Create(_title, _width, _height, _targetFps, MainView);
+        return RaylibWindow.Create(_title, _width, _height, _targetFps, typeof(TView));
     }
 
     public IGameWindowBuilder SetSize(int width, int height)
@@ -54,23 +46,6 @@ public class RaylibWindowBuilder : IGameWindowBuilder
 
         _targetFps = targetFps;
 
-        return this;
-    }
-
-    public IGameWindowBuilder SetMainView<TView>() where TView : IGameView
-    {
-        MainView = typeof(TView);
-        return this;
-    }
-
-    public IGameWindowBuilder SetMainView(Type tview)
-    {
-        if (tview.GetInterface(nameof(IGameView)) is null)
-        {
-            throw new InvalidValueException($"The type ({tview.Name}) doesnt implement the {nameof(IGameView)} interface.");
-        }
-
-        MainView = tview;
         return this;
     }
 }

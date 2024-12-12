@@ -1,23 +1,24 @@
 ﻿using CCSV.Games;
+using CCSV.Mines.Controllers;
 using CCSV.Mines.Models;
 using Raylib_cs;
 
 namespace CCSV.Mines.Views;
-public class OtherView : IOtherView
+public class OtherView : GameView<BallViewModel>
 {
     private readonly IGameWindow _window;
 
-    public OtherView(IGameWindow window)
+    public OtherView(IGameWindow window, OtherController otherController) : base(otherController)
     {
         _window = window;
     }
 
-    public void Draw()
+    public override void Draw()
     {
         Raylib.ClearBackground(Color.Black);
     }
 
-    public void Draw(BallViewModel model)
+    public override void Draw(BallViewModel model)
     {
         long fps = _window.Fps;
         long targetFps = _window.TargetFps;

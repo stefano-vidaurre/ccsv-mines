@@ -1,7 +1,6 @@
 ﻿namespace CCSV.Games;
 public interface IGameController
 {
-    void Draw();
 }
 
 public interface IGameController<out TFirstModel> : IGameController where TFirstModel : GameViewModel

@@ -13,6 +13,7 @@
 
 - Los logs internos deben ser de nivel Debug
 - Es necesario incluir la posibilidad de configurar el logger
+- Invertir dependencia controller/view
 
 ## Notas
 
