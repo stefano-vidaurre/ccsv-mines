@@ -8,3 +8,4 @@
 - Gestión de archivo de configuración
 - Gestión de texturas
 - Crear Test para fijar funcionalidad
+- Investigar ImGui
