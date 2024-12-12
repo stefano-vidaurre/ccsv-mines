@@ -79,7 +79,14 @@ public class MainController : IGameController<BallViewModel>
     [KeyboardPressed(KeyboardKey.Z)]
     public void OnZKeyPressed()
     {
-        _window.NextView<OtherView>();
+        if(_window.CurrentViewType == typeof(MainView))
+        {
+            _window.NextView<OtherView>();
+        }
+        else
+        {
+            _window.NextView<MainView>();
+        }
     }
 
     [KeyboardPressed(KeyboardKey.Escape)]

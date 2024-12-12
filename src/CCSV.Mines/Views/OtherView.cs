@@ -8,7 +8,7 @@ public class OtherView : GameView<BallViewModel>
 {
     private readonly IGameWindow _window;
 
-    public OtherView(IGameWindow window, OtherController otherController) : base(otherController)
+    public OtherView(IGameWindow window, MainController mainController) : base(mainController)
     {
         _window = window;
     }

@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace CCSV.Games;
 public class GameEventHandler : IGameEventHandler
@@ -22,7 +23,7 @@ public class GameEventHandler : IGameEventHandler
         _logger = logger;
         _currentViewType = _window.CurrentViewType;
         _serviceScope = _serviceProvider.CreateScope();
-        _gameView = _serviceScope.ServiceProvider.GetService(_currentViewType) as IGameView ?? throw new BusinessException();
+        _gameView = _serviceScope.ServiceProvider.GetService(_currentViewType) as IGameView ?? throw new WrongOperationException($"View ({_currentViewType.Name}) is not registered.");
         _gameController = _gameView.__Controller;
         _firstUpdate = true;
     }
@@ -39,26 +40,49 @@ public class GameEventHandler : IGameEventHandler
     {
         if (_currentViewType != _window.CurrentViewType)
         {
-            _logger.LogInformation("Changing the view: {0} -> {1}", _currentViewType.Name, _window.CurrentViewType.Name);
-            _serviceScope.Dispose();
-            _serviceScope = _serviceProvider.CreateScope();
-            _currentViewType = _window.CurrentViewType;
-            _gameView = _serviceScope.ServiceProvider.GetService(_currentViewType) as IGameView ?? throw new BusinessException();
-            _gameController = _gameView.__Controller;
+            OpenNextView();
         }
 
-        if(_gameController is null)
-        {
-            return Task.CompletedTask;
-        }
-
-        MethodInfo[] methods = _gameController.GetType().GetMethods();
         if (!_firstUpdate)
         {
             return Task.CompletedTask;
         }
 
+        if (_gameController is null)
+        {
+            _firstUpdate = false;
+            IEnumerable<Task> tasks = HandleGameEvents(_gameView);
+            return Task.WhenAll(tasks);
+        }
+
+        _firstUpdate = false;
+        IEnumerable<Task> controllerTasks = HandleGameEvents(_gameController);
+        IEnumerable<Task> viewTasks = HandleGameEvents(_gameView);
+        return Task.WhenAll(controllerTasks.Concat(viewTasks));
+    }
+
+    private void OpenNextView()
+    {
+        _logger.LogDebug("Changing the view: {0} -> {1}", _currentViewType.Name, _window.CurrentViewType.Name);
+        _serviceScope.Dispose();
+        _serviceScope = _serviceProvider.CreateScope();
+        _currentViewType = _window.CurrentViewType;
+        _gameView = _serviceScope.ServiceProvider.GetService(_currentViewType) as IGameView ?? throw new WrongOperationException($"View ({_currentViewType.Name}) is not registered.");
+        _gameController = _gameView.__Controller;
+    }
+
+
+    private IEnumerable<Task> HandleGameEvents<T>(T handler)
+    {
         IList<Task> tasks = new List<Task>();
+        
+        if(handler is null)
+        {
+            return tasks;
+        }
+
+        Type type = handler.GetType();
+        IEnumerable<MethodInfo> methods = type.GetMethods();
 
         foreach (MethodInfo method in methods)
         {
@@ -73,11 +97,11 @@ public class GameEventHandler : IGameEventHandler
                 continue;
             }
 
-            _logger.LogTrace("[{0}] event has happened", attribute.Name);
+            _logger.LogDebug("[{0}] event has happened", attribute.Name);
 
             if (method.GetParameters().Length == 0)
             {
-                Task? task = method.Invoke(_gameController, null) as Task;
+                Task? task = method.Invoke(handler, null) as Task;
 
                 if (task is not null)
                 {
@@ -89,7 +113,7 @@ public class GameEventHandler : IGameEventHandler
 
             if (method.GetParameters().Length == 1)
             {
-                Task? task = method.Invoke(_gameController, [_window.LastDelta]) as Task;
+                Task? task = method.Invoke(handler, [_window.LastDelta]) as Task;
 
                 if (task is not null)
                 {
@@ -99,8 +123,6 @@ public class GameEventHandler : IGameEventHandler
                 continue;
             }
         }
-
-        _firstUpdate = false;
-        return Task.WhenAll(tasks);
+        return tasks;
     }
 }
