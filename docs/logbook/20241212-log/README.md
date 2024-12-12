@@ -9,6 +9,7 @@
   - Varias vistas pueden ser gestionadas por el mismo controller
 - Los logs internos deben ser de nivel Debug
 - Gestión de eventos desde las vistas (sin controller)
+- Eventos de actualización por tick y por frame
 
 ## Trabajo pendiente
 

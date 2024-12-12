@@ -1,6 +1,5 @@
 # Draft
 
-- Eventos de actualización por tick y por frame
 - Gestión de logs
   - Queda pendiente investigar Serilog + RaylibLogger
 - Gestión de excepciones

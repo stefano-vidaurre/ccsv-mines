@@ -2,7 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Reflection;
-using System.Threading.Tasks;
 
 namespace CCSV.Games;
 public class GameEventHandler : IGameEventHandler
@@ -43,21 +42,17 @@ public class GameEventHandler : IGameEventHandler
             OpenNextView();
         }
 
-        if (!_firstUpdate)
-        {
-            return Task.CompletedTask;
-        }
-
         if (_gameController is null)
         {
-            _firstUpdate = false;
             IEnumerable<Task> tasks = HandleGameEvents(_gameView);
+            _firstUpdate = false;
             return Task.WhenAll(tasks);
         }
 
-        _firstUpdate = false;
+        
         IEnumerable<Task> controllerTasks = HandleGameEvents(_gameController);
         IEnumerable<Task> viewTasks = HandleGameEvents(_gameView);
+        _firstUpdate = false;
         return Task.WhenAll(controllerTasks.Concat(viewTasks));
     }
 
@@ -75,54 +70,69 @@ public class GameEventHandler : IGameEventHandler
     private IEnumerable<Task> HandleGameEvents<T>(T handler)
     {
         IList<Task> tasks = new List<Task>();
-        
-        if(handler is null)
+
+        if (handler is null)
         {
             return tasks;
         }
 
-        Type type = handler.GetType();
-        IEnumerable<MethodInfo> methods = type.GetMethods();
+        Type handlerType = handler.GetType();
 
-        foreach (MethodInfo method in methods)
+        foreach (MethodInfo method in handlerType.GetMethods())
         {
-            GameEventAttribute? attribute = Attribute.GetCustomAttribute(method, typeof(GameEventAttribute)) as GameEventAttribute;
-            if (attribute is null)
-            {
-                continue;
-            }
-
-            if (!attribute.HasHappened())
-            {
-                continue;
-            }
-
-            _logger.LogDebug("[{0}] event has happened", attribute.Name);
-
-            if (method.GetParameters().Length == 0)
-            {
-                Task? task = method.Invoke(handler, null) as Task;
-
-                if (task is not null)
-                {
-                    tasks.Add(task);
-                }
-
-                continue;
-            }
-
-            if (method.GetParameters().Length == 1)
-            {
-                Task? task = method.Invoke(handler, [_window.LastDelta]) as Task;
-
-                if (task is not null)
-                {
-                    tasks.Add(task);
-                }
-
-                continue;
-            }
+            tasks.Add(HandleMethod(handler, method));
         }
+
         return tasks;
+    }
+
+    private Task HandleMethod<T>(T handler, MethodInfo method)
+    {
+        GameEventAttribute? attribute = Attribute.GetCustomAttribute(method, typeof(GameEventAttribute)) as GameEventAttribute;
+        if (attribute is null)
+        {
+            return Task.CompletedTask;
+        }
+
+        DesyncEventAttribute? desyncAttribute = Attribute.GetCustomAttribute(method, typeof(DesyncEventAttribute)) as DesyncEventAttribute;
+        if (!_firstUpdate && desyncAttribute is null)
+        {
+            return Task.CompletedTask;
+        }
+
+        if (!attribute.HasHappened())
+        {
+            return Task.CompletedTask;
+        }
+
+        ParameterInfo[] parameters = method.GetParameters();
+
+        if (parameters.Length == 0)
+        {
+            _logger.LogDebug("[{0}] event has happened", attribute.Name);
+            Task? task = method.Invoke(handler, null) as Task;
+
+            if (task is null)
+            {
+                return Task.CompletedTask;
+            }
+
+            return task;
+        }
+
+        if (parameters.Length == 1 && parameters[0].ParameterType == _window.LastDelta.GetType())
+        {
+            _logger.LogDebug("[{0}] event has happened (Delta: {1})", attribute.Name, _window.LastDelta);
+            Task? task = method.Invoke(handler, [_window.LastDelta]) as Task;
+
+            if (task is null)
+            {
+                return Task.CompletedTask;
+            }
+
+            return task;
+        }
+
+        return Task.CompletedTask;
     }
 }

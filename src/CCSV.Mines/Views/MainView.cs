@@ -29,5 +29,7 @@ public class MainView : GameView<BallViewModel>
         Raylib.DrawText($"FPS: {fps}/{targetFps}", 12, 12, 20, Color.Black);
         Raylib.DrawText($"Delta: {delta}/{targetDelta}", 12, 42, 20, Color.Black);
         Raylib.DrawCircle(model.PosX, model.PosY, model.Radius, Color.Black);
+        Raylib.DrawText($"Counter: {model.UpdateCounterFps}", 12, 120, 20, Color.Black);
+        Raylib.DrawText($"Counter: {model.UpdateCounterFree}", 12, 142, 20, Color.Black);
     }
 }
