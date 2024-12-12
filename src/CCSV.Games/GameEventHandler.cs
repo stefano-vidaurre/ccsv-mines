@@ -109,7 +109,6 @@ public class GameEventHandler : IGameEventHandler
 
         if (parameters.Length == 0)
         {
-            _logger.LogDebug("[{0}] event has happened", attribute.Name);
             Task? task = method.Invoke(handler, null) as Task;
 
             if (task is null)
@@ -122,7 +121,6 @@ public class GameEventHandler : IGameEventHandler
 
         if (parameters.Length == 1 && parameters[0].ParameterType == _window.LastDelta.GetType())
         {
-            _logger.LogDebug("[{0}] event has happened (Delta: {1})", attribute.Name, _window.LastDelta);
             Task? task = method.Invoke(handler, [_window.LastDelta]) as Task;
 
             if (task is null)
