@@ -19,7 +19,7 @@ public class MainController : GameController<BallViewModel>
         _window = window;
     }
 
-    public override BallViewModel GetViewModel()
+    public override BallViewModel GetFirstLayerViewModel()
     {
         return new BallViewModel()
         {
