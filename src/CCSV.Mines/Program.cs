@@ -11,10 +11,6 @@ public static class Program
     public static void Main()
     {
         IGameApplicationBuilder builder = RaylibApplicationBuilder.CreateBuilder();
-        builder.Window
-            .SetTitle("Mines")
-            .SetSize(640, 480)
-            .SetTargetFps(60);
 
         builder.Services.AddSingleton<MainController>();
         builder.Services.AddScoped<MainView>();

@@ -17,6 +17,14 @@ public class RaylibWindowBuilder : IGameWindowBuilder
         _targetFps = 60;
     }
 
+    public RaylibWindowBuilder(IGameConfiguration windowConfiguration)
+    {
+        _title = windowConfiguration.Title;
+        _width = windowConfiguration.Width;
+        _height = windowConfiguration.Height;
+        _targetFps = windowConfiguration.TargetFps;
+    }
+
     public IGameWindow Build<TView>() where TView : IGameView
     {
         return RaylibWindow.Create(_title, _width, _height, _targetFps, typeof(TView));
