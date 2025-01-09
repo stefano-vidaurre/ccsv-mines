@@ -7,5 +7,4 @@ public interface IGameConfiguration
     string Title { get; }
     string Version { get; }
     int Width { get; }
-    bool HasVSync { get; }
 }
